@@ -1,5 +1,7 @@
 require 'sqlite3'
 require_relative 'questions_database.rb'
+require_relative 'users.rb'
+require_relative 'questions.rb'
 
 class QuestionFollow
 
@@ -16,6 +18,42 @@ class QuestionFollow
         SQL
         return nil unless question_follow.length > 0
         QuestionFollow.new(question_follow.first)
+    end
+
+    def self.followers_for_question_id(question_id)
+        question_follow = QuestionsDatabase.instance.execute(<<-SQL, question_id)
+        SELECT 
+            fname, lname, users.id
+        FROM 
+            users 
+        LEFT JOIN 
+            question_follows 
+        ON 
+            users.id = question_follows.author_id
+        WHERE 
+            question_id = ?;
+        SQL
+        return nil unless question_follow.length > 0
+
+        question_follow.map {|follow| User.new(follow)} 
+    end
+
+    def QuestionFollow::followed_questions_for_user_id(user_id)
+        question_follow = QuestionsDatabase.instance.execute(<<-SQL, user_id)
+        SELECT 
+            title, body, questions.author_id
+        FROM 
+            questions
+        LEFT JOIN 
+            question_follows 
+        ON 
+            questions.id = question_follows.question_id
+        WHERE 
+            user_id = ?;
+        SQL
+        return nil unless question_follow.length > 0
+
+        question_follow.map {|follow| Question.new(follow)} 
     end
 
     def initialize(options)
