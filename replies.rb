@@ -53,7 +53,7 @@ class Reply
 
 end
 
-# id INTEGER PRIMARY KEY,
+#     id INTEGER PRIMARY KEY,
 #     body TEXT NOT NULL,
 #     author_id INTEGER NOT NULL,
 #     question_id INTEGER NOT NULL,
