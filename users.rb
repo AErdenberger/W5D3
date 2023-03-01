@@ -1,7 +1,10 @@
 require 'sqlite3'
 require_relative 'questions_database.rb'
 
-class Users
+class User
+
+    attr_accessor :fname, :lname, :id
+
     def self.find_by_id(id)
         user = QuestionsDatabase.instance.execute(<<-SQL, id)
             SELECT
@@ -12,7 +15,20 @@ class Users
                 id = ?
         SQL
         return nil unless user.length > 0
-        Users.new(user.first)
+        User.new(user.first)
+    end
+
+    def self.find_by_name(fname, lname)
+        user = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
+            SELECT
+                *
+            FROM
+                users
+            WHERE
+                fname = ? AND lname = ?
+        SQL
+        return nil unless user.length > 0
+        User.new(user.first)
     end
 
     def initialize(options)
