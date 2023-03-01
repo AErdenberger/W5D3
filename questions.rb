@@ -1,5 +1,8 @@
 require 'sqlite3'
 require_relative 'questions_database.rb'
+require_relative 'users.rb'
+require_relative 'replies.rb'
+
 
 class Question
 
@@ -28,7 +31,7 @@ class Question
                 author_id = ?
         SQL
         return nil unless questions.length > 0
-        questions.map = {|question| Question.new(question) }
+        questions.map {|question| Question.new(question)}
     end
 
     def initialize(options)
@@ -37,5 +40,15 @@ class Question
         @body = options['body']
         @author_id = options['author_id']
     end
+
+    def author
+        User.find_by_id(author_id)
+    end 
+
+    def replies
+        Reply.find_by_question_id(id)
+    end
+
+
 
 end

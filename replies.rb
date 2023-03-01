@@ -1,9 +1,12 @@
 require 'sqlite3'
 require_relative 'questions_database.rb'
+require_relative 'users.rb'
+require_relative 'questions.rb'
+
 
 class Reply
 
-    attr_accessor :body, :author_id, :id, :parent_reply_id
+    attr_accessor :body, :author_id, :id, :parent_reply_id, :question_id
 
     def self.find_by_id(id)
         reply = QuestionsDatabase.instance.execute(<<-SQL, id)
@@ -61,7 +64,24 @@ class Reply
         @id = options['id']
         @body = options['body']
         @author_id = options['author_id']
+        @question_id = options['question_id']
         @parent_reply_id = options['parent_reply_id']
+    end
+
+    def author
+        User.find_by_id(author_id)
+    end
+
+    def question
+        Question.find_by_id(question_id)
+    end
+
+    def parent_reply
+        Question.find_by_id(parent_reply_id)
+    end
+
+    def child_replies
+        Reply.find_by_parent_reply_id(id)
     end
 
 end

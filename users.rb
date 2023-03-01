@@ -1,5 +1,7 @@
 require 'sqlite3'
 require_relative 'questions_database.rb'
+require_relative 'questions.rb'
+require_relative 'replies.rb'
 
 class User
 
@@ -35,6 +37,14 @@ class User
         @id = options['id']
         @fname = options['fname']
         @lname = options['lname']
+    end
+
+    def authored_questions
+        Question.find_by_author_id(id)
+    end
+
+    def authored_replies
+        Reply.find_by_author_id(id)
     end
 
     

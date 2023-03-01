@@ -67,3 +67,17 @@ VALUES
     ("Kevin Bacon?", "How many steps away am I removed from Kevin Bacon?", (SELECT id FROM users WHERE fname = 'Alex' AND lname = 'Erdenberger')),
     ("Let's talk about me.", "Why Am I so great?", (SELECT id FROM users WHERE fname = "Kevin" AND lname = "Bacon"));
 
+INSERT INTO replies(body, author_id, question_id, parent_reply_id)
+VALUES
+    ("Because it reflects the color of the water",
+     (SELECT id FROM users WHERE id = 2),
+     (SELECT id FROM questions WHERE id = 1),
+     NULL );
+
+
+
+-- d INTEGER PRIMARY KEY,
+--     body TEXT NOT NULL,
+--     author_id INTEGER NOT NULL,
+--     question_id INTEGER NOT NULL,
+--     parent_reply_id INTEGER,
