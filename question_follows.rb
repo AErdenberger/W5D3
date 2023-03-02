@@ -38,8 +38,8 @@ class QuestionFollow
         question_follow.map {|follow| User.new(follow)} 
     end
 
-    def QuestionFollow::followed_questions_for_user_id(user_id)
-        question_follow = QuestionsDatabase.instance.execute(<<-SQL, user_id)
+    def self.followed_questions_for_user_id(author_id)
+        question_follow = QuestionsDatabase.instance.execute(<<-SQL, author_id)
         SELECT 
             title, body, questions.author_id
         FROM 
@@ -49,12 +49,35 @@ class QuestionFollow
         ON 
             questions.id = question_follows.question_id
         WHERE 
-            user_id = ?;
+            question_follows.author_id = ?;
         SQL
         return nil unless question_follow.length > 0
 
         question_follow.map {|follow| Question.new(follow)} 
     end
+
+    def self.most_followed_questions(n)
+        question_follow = QuestionsDatabase.instance.execute(<<-SQL, n)
+        SELECT
+            questions.*
+        FROM
+            questions
+        LEFT JOIN
+            question_follows
+        ON
+            questions.id = question_follows.question_id
+        GROUP BY
+            question_follows.question_id
+        ORDER BY
+            COUNT (question_follows.question_id) DESC
+        LIMIT
+            ?
+        SQL
+        question_follow.map {|follow| Question.new(follow)} 
+    end
+         # order by count(author id)
+
+
 
     def initialize(options)
         @id = options['id']
@@ -67,3 +90,6 @@ end
     # id INTEGER PRIMARY KEY,
     # author_id INTEGER NOT NULL,
     # question_id INTEGER NOT NULL,
+
+
+   

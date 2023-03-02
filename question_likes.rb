@@ -1,5 +1,7 @@
 require 'sqlite3'
 require_relative 'questions_database.rb'
+require_relative 'users.rb'
+require_relative 'questions.rb'
 
 class QuestionLike
 
@@ -30,6 +32,24 @@ class QuestionLike
         return nil unless question_likes.length > 0
         
         question_likes.map { |likes| QuestionLike.new(likes) }
+    end
+
+    def self.likers_for_question_id(question_id)
+        question_likes = QuestionsDatabase.instance.execute(<<-SQL, question_id)
+        SELECT 
+            users.*
+        FROM 
+            users 
+        LEFT JOIN 
+            question_likes 
+        ON 
+            users.id = question_likes.author_id
+        WHERE 
+            question_id = ?;
+        SQL
+        return nil unless question_likes.length > 0
+
+        question_likes.map {|like| User.new(like)}
     end
 
     def initialize(options)

@@ -1,5 +1,6 @@
 require 'sqlite3'
 require_relative 'questions_database.rb'
+require_relative 'question_follows.rb'
 
 class User
 
@@ -36,6 +37,12 @@ class User
         @fname = options['fname']
         @lname = options['lname']
     end
+
+    def followed_questions
+        QuestionFollow.followed_questions_for_user_id(id)
+    end
+
+    
 
 end
 
