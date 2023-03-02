@@ -2,6 +2,7 @@ require 'sqlite3'
 require_relative 'questions_database.rb'
 require_relative 'users.rb'
 require_relative 'replies.rb'
+require_relative 'qustion_follows.rb'
 
 
 class Question
@@ -34,6 +35,10 @@ class Question
         questions.map {|question| Question.new(question)}
     end
 
+    def self.most_followed(n=1)
+        QuestionFollow.most_followed_questions(n)
+    end
+
     def initialize(options)
         @id = options['id']
         @title = options['title']
@@ -49,6 +54,8 @@ class Question
         Reply.find_by_question_id(id)
     end
 
-
+    def followers
+        QuestionFollow.followers_for_question_id(id)
+    end
 
 end
