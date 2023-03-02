@@ -38,7 +38,7 @@ class QuestionFollow
         question_follow.map {|follow| User.new(follow)} 
     end
 
-    def QuestionFollow::followed_questions_for_user_id(user_id)
+    def self.followed_questions_for_user_id(user_id)
         question_follow = QuestionsDatabase.instance.execute(<<-SQL, user_id)
         SELECT 
             title, body, questions.author_id

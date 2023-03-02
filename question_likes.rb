@@ -52,6 +52,43 @@ class QuestionLike
         question_likes.map {|like| User.new(like)}
     end
 
+    def self.most_liked_question(n)
+        question_likes = QuestionsDatabase.instance.execute(<<-SQL, question_id)
+        SELECT 
+            questions.*
+        FROM 
+            questions 
+        LEFT JOIN 
+            question_likes 
+        ON 
+            questions.id = question_likes.question_id
+        GROUP BY
+            question_likes.question_id
+        ORDER BY
+            COUNT (question_likes.question_id) DESC
+        LIMIT
+            ?
+        SQL
+        return nil unless question_likes.length > 0
+
+        question_likes.map {|like| User.new(like)}
+    end
+
+    def self.num_likes_for_question_id(question_id)
+        question_likes = QuestionsDatabase.instance.execute(<<-SQL, question_id)
+        SELECT 
+            COUNT(users.id)
+        FROM 
+            users 
+        LEFT JOIN 
+            question_likes 
+        ON 
+            users.id = question_likes.author_id
+        WHERE 
+            question_id = ?;
+        SQL
+    end
+
     def initialize(options)
         @id = options['id']
         @author_id = options['author_id']

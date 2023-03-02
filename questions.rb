@@ -2,7 +2,7 @@ require 'sqlite3'
 require_relative 'questions_database.rb'
 require_relative 'users.rb'
 require_relative 'replies.rb'
-require_relative 'qustion_follows.rb'
+require_relative 'question_follows.rb'
 
 
 class Question
@@ -39,6 +39,10 @@ class Question
         QuestionFollow.most_followed_questions(n)
     end
 
+    def self.most_liked(n=1)
+        QuestionLike.most_liked_question(n)
+    end
+
     def initialize(options)
         @id = options['id']
         @title = options['title']
@@ -56,6 +60,14 @@ class Question
 
     def followers
         QuestionFollow.followers_for_question_id(id)
+    end
+
+    def likers 
+        QuestionLike.likers_for_question_id(id)
+    end
+
+    def num_likes
+        QuestionLike.num_likes_for_question_id(id)
     end
 
 end

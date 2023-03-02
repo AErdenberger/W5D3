@@ -84,7 +84,15 @@ VALUES
     ((SELECT id from users WHERE fname = "Kevin" AND lname = "Bacon"),(SELECT id FROM questions WHERE id = 2)),
     ((SELECT id from users WHERE fname = "Kevin" AND lname = "Bacon"),(SELECT id FROM questions WHERE id = 3));
 
-
+INSERT INTO question_likes(author_id, question_id)
+VALUES
+    ((SELECT id from users WHERE fname = 'Josh' AND lname = 'van Eyken'),(SELECT id FROM questions WHERE id = 1)),
+    ((SELECT id from users WHERE fname = 'Josh' AND lname = 'van Eyken'),(SELECT id FROM questions WHERE id = 2)),
+    ((SELECT id from users WHERE fname = 'Josh' AND lname = 'van Eyken'),(SELECT id FROM questions WHERE id = 3)),
+    ((SELECT id from users WHERE fname = 'Alex' AND lname = 'Erdenberger'),(SELECT id FROM questions WHERE id = 1)),
+    ((SELECT id from users WHERE fname = 'Alex' AND lname = 'Erdenberger'),(SELECT id FROM questions WHERE id = 2)),
+    ((SELECT id from users WHERE fname = "Kevin" AND lname = "Bacon"),(SELECT id FROM questions WHERE id = 2)),
+    ((SELECT id from users WHERE fname = "Kevin" AND lname = "Bacon"),(SELECT id FROM questions WHERE id = 3));
 
 -- d INTEGER PRIMARY KEY,
 --     body TEXT NOT NULL,
